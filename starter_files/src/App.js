@@ -1,61 +1,63 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react"
+import "./App.css"
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      commentText: '',
-      name: '',
+      commentText: "",
+      name: "",
       comments: [],
-      nasa: {},
-    };
+      nasa: {}
+    }
 
-    this.handleCommentTextChange = this.handleCommentTextChange.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleCommentTextChange = this.handleCommentTextChange.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
   }
 
-  handleCommentTextChange(event){
+  handleCommentTextChange(event) {
     this.setState({
       commentText: event.target.value
     })
   }
 
-  handleNameChange(event){
+  handleNameChange(event) {
     this.setState({
       name: event.target.value
     })
   }
 
-  handleFormSubmit(event){
+  handleFormSubmit(event) {
     event.preventDefault()
     const newComment = {
       comment: this.state.commentText,
-      author: this.state.author
+      author: this.state.name
     }
-    const comments = this.stats.comments;
+    const comments = this.state.comments
     comments.push(newComment)
-    
+
     this.setState({
       comments: comments,
-      comment: "",
-      author: ""
+      commentText: "",
+      name: ""
     })
   }
 
   componentWillMount() {
-    fetch('https://api.nasa.gov/planetary/apod?api_key=NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo')
-    .then(r => r.json() )
-    .then((json) => {
-      console.log("Data from componentWillMount fetch", json)
-      this.setState({nasa: json})
-    })
+    fetch(
+      "https://api.nasa.gov/planetary/apod?api_key=NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo"
+    )
+      .then(r => r.json())
+      .then(json => {
+        console.log("Data from componentWillMount fetch", json)
+        this.setState({ nasa: json })
+      })
   }
 
   render() {
-    let nasa = this.state.nasa;
+    let nasa = this.state.nasa
     return (
       <div className="App container-fluid">
         <div className="row">
@@ -67,42 +69,69 @@ class App extends Component {
         </div>
         <section className="row">
           <div className="col-md-10 offset-md-1">
-          <h1 className="display-3">{nasa.title}</h1>
-          <div className="col-md-6">
-            <img className="img-fluid" alt="mars" src={nasa.url}/>
-          </div>
-          <div className="col-md-6">
-            <p>{nasa.explanation}</p>
-            <div className="card">
-              <div className="card-block">
-                <h3>Leave A Comment</h3>
-                <form>
-                  <div className="form-group">
-                    <textarea className="form-control" name="comment"  rows="3" type="text" />
-                  </div>
-                  <div className="form-group">
-                    <input className="form-control col-md-3" name="name"  type="text"/>
-                  </div>
-                  <div className="form-group pull-right">
-                    <input className="btn btn-primary btn-lg" type="submit" value="Submit"/>
-                  </div>
-                </form>
+            <h1 className="display-3">
+              {nasa.title}
+            </h1>
+            <div className="col-md-6">
+              <img className="img-fluid" alt="mars" src={nasa.url} />
+            </div>
+            <div className="col-md-6">
+              <p>
+                {nasa.explanation}
+              </p>
+              <div className="card">
+                <div className="card-block">
+                  <h3>Leave A Comment</h3>
+                  <form onSubmit={this.handleFormSubmit}>
+                    <div className="form-group">
+                      <textarea
+                        className="form-control"
+                        name="comment"
+                        rows="3"
+                        type="text"
+                        value={this.state.commentText}
+                        onChange={this.handleCommentTextChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-control col-md-3"
+                        name="name"
+                        type="text"
+                        value={this.state.name}
+                        onChange={this.handleNameChange}
+                      />
+                    </div>
+                    <div className="form-group pull-right">
+                      <input
+                        className="btn btn-primary btn-lg"
+                        type="submit"
+                        value="Submit"
+                      />
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </section>
         <section className="row">
           <div className="col-md-10 offset-md-1">
             <div className="card comments">
               <div className="card-block">
-              <h4 className="card-subtitle mb-2 text-muted">Comments</h4>
+                <h4 className="card-subtitle mb-2 text-muted">Comments</h4>
                 <div className="card comments col-md-5">
-                  {this.state.comments.map( (comment) => {
-                    return <div>
-                      <p>{comment.comment}</p>
-                      <p>{comment.author}</p>
-                    </div>
+                  {this.state.comments.map(comment => {
+                    return (
+                      <div>
+                        <p>
+                          {comment.comment}
+                        </p>
+                        <p>
+                          {comment.author}
+                        </p>
+                      </div>
+                    )
                   })}
                 </div>
               </div>
@@ -114,4 +143,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App
